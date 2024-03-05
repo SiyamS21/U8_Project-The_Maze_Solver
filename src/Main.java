@@ -46,7 +46,7 @@ public class Main {
         String mostRecentMove = mostRecent;
         boolean up = true, down = true, left = true, right = true;
         String endMessage = "(0, 0) ---> ";
-        while (currentRow != maze.length - 1 && currentColumn != maze[0].length - 1) {
+        while (currentRow != maze.length - 1 || currentColumn != maze[0].length - 1) {
             up = true;
             down = true;
             left = true;
@@ -75,112 +75,44 @@ public class Main {
             if (currentColumn == maze[0].length - 1) {
                 right = false;
             }
-            if (up && maze[currentRow--][currentColumn].equals(".")) {
-                currentRow--;
-                mostRecentMove = "up";
-                System.out.println("up");
-            }
-            else if (down && maze[currentRow++][currentColumn].equals(".")) {
-                currentRow++;
-                mostRecentMove = "down";
-                System.out.println("down");
-            }
-            else if (left && maze[currentRow][currentColumn--].equals(".")) {
-                currentColumn--;
-                mostRecentMove = "left";
-                System.out.println("left");
-            }
-            else if (right && maze[currentRow][currentColumn++].equals(".")) {
-                currentColumn++;
-                mostRecentMove = "right";
-                System.out.println("right");
-            }
-            endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ") ---> ";
-        }
-        System.out.println(endMessage);
-        return true;
-    }
-
-
-    public static boolean solvePathPart1(String[][] maze, int x, int y, String mostRecent) {
-        int currentRow = x;
-        int currentColumn = y;
-        String mostRecentMove = mostRecent;
-        String endMessage = "(0, 0) ---> ";
-        while (currentRow != maze.length - 1 && currentColumn != maze[0].length - 1) {
-            boolean up = true, down = true, left = true, right = true;
-            if (mostRecentMove.equals("up")) {
-                up = false;
-            }
-            else if (mostRecentMove.equals("down")) {
-                down = false;
-            }
-            else if (mostRecentMove.equals("left")) {
-                left = false;
-            }
-            else if (mostRecentMove.equals("right")) {
-                right = false;
-            }
-            if (currentRow == 0) {
-                up = false;
-            }
-            if (currentRow == maze.length - 1) {
-                down = false;
-            }
-            if (currentColumn == 0) {
-                left = false;
-            }
-            if (currentColumn == maze[0].length) {
-                right = false;
-            }
-            int count = 0;
             if (up) {
-                count++;
-                System.out.println("up");
+                if (maze[currentRow - 1][currentColumn].equals(".")) {
+                    currentRow--;
+                    mostRecentMove = "up";
+                    down = false;
+                    left = false;
+                    right = false;
+                }
             }
             if (down) {
-                count++;
-                System.out.println("down");
+                if (maze[currentRow + 1][currentColumn].equals(".")) {
+                    currentRow = currentRow + 1;
+                    mostRecentMove = "down";
+                    left = false;
+                    right = false;
+                }
             }
             if (left) {
-                count++;
-                System.out.println("left");
+                if (maze[currentRow][currentColumn - 1].equals(".")) {
+                    currentColumn--;
+                    mostRecentMove = "left";
+                    right = false;
+                }
             }
             if (right) {
-                count++;
-                System.out.println("right");
-            }
-            System.out.println(count);
-            if (count == 1) {
-                if (up) {
-                    currentRow--;
-                }
-                else if (down) {
-                    currentRow++;
-                }
-                else if (left) {
-                    currentColumn--;
-                }
-                else if (right) {
-                    currentRow++;
+                if (maze[currentRow][currentColumn + 1].equals(".")) {
+                    currentColumn++;
+                    mostRecentMove = "right";
                 }
             }
-            endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ") ---> ";
+            if (currentRow != maze.length - 1 || currentColumn != maze[0].length - 1) {
+                endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ") ---> ";
+            }
+            else {
+                endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ")";
+            }
         }
         System.out.println(endMessage);
-        return true;
-    }
-    public static boolean solvePathPart1Version2(String[][] maze) {
-        int currentRow = 0;
-        int currentColumn = 0;
-        while (currentRow != maze.length - 1 && currentColumn != maze[0].length) {
-            if (maze[currentRow + 1][currentColumn].equals(".")) {
-                currentRow++;
-            }
-            else if (maze[currentRow][currentColumn + 1].equals(".")) {
-                currentColumn++;
-            }
-        }
         return true;
     }
 }
