@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         String[][] maze = Main.getMaze("src/maze");
-        Main.solvePath(maze, 0, 0, "");
+        Main.solvePath(maze);
     }
 
     public static String[][] getMaze(String fileName) {
@@ -44,6 +44,168 @@ public class Main {
         int currentRow = x;
         int currentColumn = y;
         String mostRecentMove = mostRecent;
+        boolean up = true, down = true, left = true, right = true;
+        String endMessage = "(0, 0) ---> ";
+        while (currentRow != maze.length - 1 || currentColumn != maze[0].length - 1) {
+            up = true;
+            down = true;
+            left = true;
+            right = true;
+            if (mostRecentMove.equals("up")) {
+                down = false;
+            }
+            else if (mostRecentMove.equals("down")) {
+                up = false;
+            }
+            else if (mostRecentMove.equals("left")) {
+                right = false;
+            }
+            else if (mostRecentMove.equals("right")) {
+                left = false;
+            }
+            if (currentRow == 0) {
+                up = false;
+            }
+            if (currentRow == maze.length - 1) {
+                down = false;
+            }
+            if (currentColumn == 0) {
+                left = false;
+            }
+            if (currentColumn == maze[0].length - 1) {
+                right = false;
+            }
+            int count = 0;
+            if (up) {
+                if (maze[currentRow - 1][currentColumn].equals(".")) {
+                    count++;
+                }
+            }
+            if (down) {
+                if (maze[currentRow + 1][currentColumn].equals(".")) {
+                    count++;
+                }
+            }
+            if (left) {
+                if (maze[currentRow][currentColumn - 1].equals(".")) {
+                    count++;
+                }
+            }
+            if (right) {
+                if (maze[currentRow][currentColumn + 1].equals(".")) {
+                    count++;
+                }
+            }
+            if (count == 0) {
+                return false;
+            }
+            if (count == 1) {
+                if (up) {
+                    currentRow--;
+                    mostRecentMove = "up";
+                }
+                if (down) {
+                    currentRow++;
+                    mostRecentMove = "down";
+                }
+                if (left) {
+                    currentColumn--;
+                    mostRecentMove = "left";
+                }
+                if (right) {
+                    currentColumn++;
+                    mostRecentMove = "right";
+                }
+            }
+            else if (count > 1) {
+                if (up) {
+                    if (!solvePath(maze, currentRow, currentColumn, mostRecentMove)) {
+                        if (down) {
+                            currentRow++;
+                            mostRecentMove = "down";
+                        }
+                        if (left) {
+                            currentColumn--;
+                            mostRecentMove = "left";
+                        }
+                        if (right) {
+                            currentColumn++;
+                            mostRecentMove = "right";
+                        }
+                    }
+                }
+                if (down) {
+                    if (!solvePath(maze, currentRow, currentColumn, mostRecentMove)) {
+                        if (up) {
+                            currentRow--;
+                            mostRecentMove = "up";
+                        }
+                        if (left) {
+                            currentColumn--;
+                            mostRecentMove = "left";
+                        }
+                        if (right) {
+                            currentColumn++;
+                            mostRecentMove = "right";
+                        }
+                    }
+                }
+                if (left) {
+                    if (!solvePath(maze, currentRow, currentColumn, mostRecentMove)) {
+                        if (up) {
+                            currentRow--;
+                            mostRecentMove = "up";
+                        }
+                        if (down) {
+                            currentRow++;
+                            mostRecentMove = "down";
+                        }
+                        if (right) {
+                            currentColumn++;
+                            mostRecentMove = "right";
+                        }
+                    }
+                }
+                if (right) {
+                    if (!solvePath(maze, currentRow, currentColumn, mostRecentMove)) {
+                        if (up) {
+                            currentRow--;
+                            mostRecentMove = "up";
+                        }
+                        if (down) {
+                            currentRow++;
+                            mostRecentMove = "down";
+                        }
+                        if (left) {
+                            currentColumn--;
+                            mostRecentMove = "left";
+                        }
+                    }
+                }
+            }
+
+            if (currentRow != maze.length - 1 || currentColumn != maze[0].length - 1) {
+                endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ") ---> ";
+            }
+            else {
+                endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ")";
+            }
+        }
+        System.out.println(endMessage);
+        return true;
+    }
+
+
+
+
+
+
+
+    // use if no dead ends
+    public static boolean solvePath(String[][] maze) {
+        int currentRow = 0;
+        int currentColumn = 0;
+        String mostRecentMove = "";
         boolean up = true, down = true, left = true, right = true;
         String endMessage = "(0, 0) ---> ";
         while (currentRow != maze.length - 1 || currentColumn != maze[0].length - 1) {
