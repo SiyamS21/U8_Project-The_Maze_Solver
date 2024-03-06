@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         String[][] maze = Main.getMaze("src/maze");
-        Main.solvePath(maze);
+        Main.solvePath(maze, 0, 0, "");
     }
 
     public static String[][] getMaze(String fileName) {
@@ -96,6 +96,7 @@ public class Main {
                     count++;
                 }
             }
+            System.out.println("count = " + count);
             if (count == 0) {
                 return false;
             }
@@ -117,7 +118,7 @@ public class Main {
                     mostRecentMove = "right";
                 }
             }
-            else if (count > 1) {
+            if (count > 1) {
                 if (up) {
                     if (!solvePath(maze, currentRow, currentColumn, mostRecentMove)) {
                         if (down) {
@@ -190,6 +191,7 @@ public class Main {
             else {
                 endMessage = endMessage + "(" + currentRow + ", " + currentColumn + ")";
             }
+            System.out.println("(" + currentRow + ", " + currentColumn + ")");
         }
         System.out.println(endMessage);
         return true;
